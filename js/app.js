@@ -1,4 +1,9 @@
+function mapError(){
+    alert("Application can't load");
+};
+
 function init() {
+    'use strict'
 
     document.querySelector('.loading').classList.add('hide');
 

@@ -213,7 +213,7 @@ function init() {
 
         // Subscribe to changed in search field. If have change, render again with the filtered locations.
         this.filteredItems.subscribe(function() {
-            
+
             // Hide markers
             that.clearMarkers();
 
@@ -308,6 +308,9 @@ function init() {
             // Open targeted infowindow and change its icon.
             infowindow.open(context.map, marker);
             marker.setIcon(settings.iconMapActive);
+
+            // Center marker
+            this.map.panTo(marker.getPosition());
         };
     };
 

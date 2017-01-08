@@ -1,9 +1,9 @@
 function mapError(){
-    alert("Application can't load");
+    alert("Application can't be load");
 };
 
 function init() {
-    'use strict'
+    'use strict';
 
     document.querySelector('.loading').classList.add('hide');
 
@@ -162,6 +162,7 @@ function init() {
         // Initial current location to be the first one.
         this.currentPlace = ko.observable(this.placeList()[0]);
 
+
         // Functions invoked when user clicked an item in the list.
         this.setPlace = function(clickedPlace) {
 
@@ -176,8 +177,7 @@ function init() {
 
             // Activate the selected marker to change icon.
             // function(marker, context, infowindow, target)
-            that.activateMarker(that.markers[target], that, that.infowindow)();
-
+            that.activateMarker(that.markers[target], that, that.infowindow, target)();
         };
 
         // Filter location name with value from search field.
@@ -224,6 +224,10 @@ function init() {
 
             // Render current filtered marker
             that.renderMarkers(that.filteredItems());
+
+            // Center map based in fisrt places array
+            var latlng = new google.maps.LatLng(that.filteredItems()[0].lat, that.filteredItems()[0].lng);
+            that.map.panTo(latlng);
         });
 
         // Add event listener for map click event (when user click on other areas of the map beside of markers)
@@ -281,6 +285,7 @@ function init() {
 
     // Set all marker icons back to default icons.
     ViewModel.prototype.deactivateAllMarkers = function() {
+         $('footer').removeClass('showing');
         var markers = this.markers;
         for (var i = 0; i < markers.length; i++) {
             markers[i].setIcon(settings.iconMapDefault);
@@ -288,6 +293,28 @@ function init() {
 
         }
     };
+
+    // Method for foursquare API to render ratings
+    ViewModel.prototype.foursquareReq = function(idx) {
+        var ll = {
+            lat: this.placeList()[idx].lat,
+            lng: this.placeList()[idx].lng
+        }
+
+        //AJAX call
+        $.ajax({
+            type: 'GET',
+            dataType: 'jsonp',
+            cache: true,
+            url: 'https://api.foursquare.com/v2/venues/search?oauth_token=HC11S4GT3NOVSBXWIDJRBT45SCT4OBB2OELPSRGETDQHWRHH&v=20170108&ll=' + ll.lat + ',' + ll.lng
+        }).done(function(data){
+            var info = data.response.venues[0];
+            $('footer').toggleClass('showing');
+            $('footer').find('.categoria span').text(info.categories[0].name);
+            $('footer').find('.localizacao span').text(info.location.address);
+            $('footer').find('.checkin span').text(info.stats.checkinsCount);
+        });
+    }
 
     // Set the target marker to change icon and open infowindow
     // Call from user click on the menu list or click on the marker
@@ -315,7 +342,10 @@ function init() {
             marker.setIcon(settings.iconMapActive);
 
             // Center marker
-            this.map.panTo(marker.getPosition());
+            context.map.panTo(marker.getPosition());
+
+            // Get foursquare info
+            context.foursquareReq(target);
         };
     };
 

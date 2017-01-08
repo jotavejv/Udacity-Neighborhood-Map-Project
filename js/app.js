@@ -1,4 +1,4 @@
-function mapError(){
+function mapError() {
     alert("Application can't be load");
 };
 
@@ -285,7 +285,7 @@ function init() {
 
     // Set all marker icons back to default icons.
     ViewModel.prototype.deactivateAllMarkers = function() {
-         $('footer').removeClass('showing');
+        $('footer').removeClass('showing');
         var markers = this.markers;
         for (var i = 0; i < markers.length; i++) {
             markers[i].setIcon(settings.iconMapDefault);
@@ -307,7 +307,7 @@ function init() {
             dataType: 'jsonp',
             cache: true,
             url: 'https://api.foursquare.com/v2/venues/search?oauth_token=HC11S4GT3NOVSBXWIDJRBT45SCT4OBB2OELPSRGETDQHWRHH&v=20170108&ll=' + ll.lat + ',' + ll.lng
-        }).done(function(data){
+        }).done(function(data) {
             var info = data.response.venues[0];
             $('footer').toggleClass('showing');
             $('footer').find('.categoria span').text(info.categories[0].name);

@@ -2,13 +2,15 @@
 
 ## How to use
 
-1. Clicked on one of the list in the navigation menu. Or clicked on any markers.
-2. The infowindow and the location in the map will show.
-3. Filter places by type in the search field with their name.
+1. Clone or dowload this project
+2. Open index.html file
+3. Click on one of the list in the navigation menu. Or click on any markers.
+4. The infowindow and the location in the map will show.
+5. Filter places by type in the search field with their name.
 
 ## Requirements
 
-This app use Google Maps API key and Knockout.js
+This app use Google Maps API key, Knockout.js and Foursquare API
 
 ## Demo online
 

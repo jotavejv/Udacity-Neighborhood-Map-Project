@@ -213,6 +213,11 @@ function init() {
 
         // Subscribe to changed in search field. If have change, render again with the filtered locations.
         this.filteredItems.subscribe(function() {
+            
+            // Hide markers
+            that.clearMarkers();
+
+            // Render current filtered marker
             that.renderMarkers(that.filteredItems());
         });
 
@@ -230,6 +235,13 @@ function init() {
         google.maps.event.addListener(that.infowindow, 'closeclick', function() {
             that.deactivateAllMarkers();
         });
+    };
+
+    // Method for clear all markers.
+    ViewModel.prototype.clearMarkers = function() {
+        for (var i = 0; i < this.markers.length; i++) {
+            this.markers[i].setVisible(false);
+        }
     };
 
     // Method for render all markers.

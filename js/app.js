@@ -171,6 +171,7 @@ function init() {
 
             // Find target of the clicked location and store for use in activation of marker.
             var target = that.filteredItems().indexOf(clickedPlace);
+            //that.markers[target].setAnimation(google.maps.Animation.BOUNCE);
 
             // Prepare content for Google Maps infowindow
             that.updateContent(clickedPlace);
@@ -294,7 +295,7 @@ function init() {
         }
     };
 
-    // Method for foursquare API to render ratings
+    // Method for foursquare API
     ViewModel.prototype.foursquareReq = function(idx) {
         var ll = {
             lat: this.placeList()[idx].lat,
@@ -313,6 +314,8 @@ function init() {
             $('footer').find('.categoria span').text(info.categories[0].name);
             $('footer').find('.localizacao span').text(info.location.address);
             $('footer').find('.checkin span').text(info.stats.checkinsCount);
+        }).fail(function() {
+            alert( "Application can't retrieve foursquare data" );
         });
     }
 
@@ -331,11 +334,7 @@ function init() {
 
             // deactivate all markers
             context.deactivateAllMarkers();
-            if (marker.getAnimation() !== null) {
-                marker.setAnimation(null);
-            } else {
-                marker.setAnimation(google.maps.Animation.BOUNCE);
-            }
+            marker.setAnimation(google.maps.Animation.BOUNCE);
 
             // Open targeted infowindow and change its icon.
             infowindow.open(context.map, marker);

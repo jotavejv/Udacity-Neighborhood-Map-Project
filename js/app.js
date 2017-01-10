@@ -152,8 +152,11 @@ function init() {
     var ViewModel = function() {
         var that = this;
 
+        this.showing = ko.observable(false);
+
         // Set location list observable array from places
         this.placeList = ko.observableArray([]);
+
         // Get value from search field.
         this.search = ko.observable('');
 
@@ -294,14 +297,13 @@ function init() {
         }
 
         if(!flagInitialRender){
-            console.log("flagInitialRender")
             flagInitialRender = true;
         }
     };
 
     // Set all marker icons back to default icons.
     ViewModel.prototype.deactivateAllMarkers = function() {
-        $('footer').removeClass('showing');
+        this.showing(false);
         var markers = this.markers;
         for (var i = 0; i < markers.length; i++) {
             markers[i].setIcon(settings.iconMapDefault);
@@ -312,6 +314,7 @@ function init() {
 
     // Method for foursquare API
     ViewModel.prototype.foursquareReq = function(idx) {
+        var self = this;
         var ll = {
             lat: this.placeList()[idx].lat,
             lng: this.placeList()[idx].lng
@@ -325,7 +328,7 @@ function init() {
             url: 'https://api.foursquare.com/v2/venues/search?oauth_token=HC11S4GT3NOVSBXWIDJRBT45SCT4OBB2OELPSRGETDQHWRHH&v=20170108&ll=' + ll.lat + ',' + ll.lng
         }).done(function(data) {
             var info = data.response.venues[0];
-            $('footer').toggleClass('showing');
+            self.showing(true);
             $('footer').find('.categoria span').text(info.categories[0].name);
             $('footer').find('.localizacao span').text(info.location.address);
             $('footer').find('.checkin span').text(info.stats.checkinsCount);

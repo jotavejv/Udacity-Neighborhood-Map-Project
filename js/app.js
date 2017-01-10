@@ -145,6 +145,9 @@ function init() {
         this.description = data.description;
     };
 
+    // flag for first marker render/create
+    var flagInitialRender = false;
+
     // Initialize ViewModel Knockout
     var ViewModel = function() {
         var that = this;
@@ -263,24 +266,36 @@ function init() {
 
         // Create new marker for each place in array and push to markers array
         for (var i = 0, len = placeToShow.length; i < len; i++) {
-            var location = {
-                lat: placeToShow[i].lat,
-                lng: placeToShow[i].lng
-            };
-            var marker = new google.maps.Marker({
-                position: location,
-                map: this.map,
-                icon: settings.iconMapDefault,
-                animation: google.maps.Animation.DROP
-            });
 
-            this.markers.push(marker);
+            if(flagInitialRender){
+                this.markers[i].setVisible(true);
+                this.markers[i].setAnimation(google.maps.Animation.DROP);
+            }else{
+                var location = {
+                    lat: placeToShow[i].lat,
+                    lng: placeToShow[i].lng
+                };
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: this.map,
+                    icon: settings.iconMapDefault,
+                    animation: google.maps.Animation.DROP
+                });
 
-            //render in the map
-            this.markers[i].setMap(this.map);
+                this.markers.push(marker);
 
-            // add event listener for click event to the newly created marker
-            marker.addListener('click', this.activateMarker(marker, context, infowindow, i));
+                //render in the map
+                this.markers[i].setMap(this.map);
+
+                // add event listener for click event to the newly created marker
+                marker.addListener('click', this.activateMarker(marker, context, infowindow, i));
+            }
+            
+        }
+
+        if(!flagInitialRender){
+            console.log("flagInitialRender")
+            flagInitialRender = true;
         }
     };
 
@@ -334,6 +349,8 @@ function init() {
 
             // deactivate all markers
             context.deactivateAllMarkers();
+
+            //set animation
             marker.setAnimation(google.maps.Animation.BOUNCE);
 
             // Open targeted infowindow and change its icon.

@@ -328,10 +328,19 @@ function init() {
             url: 'https://api.foursquare.com/v2/venues/search?oauth_token=HC11S4GT3NOVSBXWIDJRBT45SCT4OBB2OELPSRGETDQHWRHH&v=20170108&ll=' + ll.lat + ',' + ll.lng
         }).done(function(data) {
             var info = data.response.venues[0];
+            var categorie, checkin, address;
+
+            // provide fallback info
+            !!info.categories[0].name ? categorie = info.categories[0].name : categorie = 'Categoria não disponível';
+            !!info.stats.checkinsCount ? checkin = info.stats.checkinsCount : checkin = 'Informação não disponível';
+            !!info.location.address ? address = info.location.address : address = ' Endereço não disponível';
+
+            // show footer
             self.showing(true);
-            $('footer').find('.categoria span').text(info.categories[0].name);
-            $('footer').find('.localizacao span').text(info.location.address);
-            $('footer').find('.checkin span').text(info.stats.checkinsCount);
+            $('footer').find('.categoria span').text(categorie);
+            $('footer').find('.localizacao span').text(address);
+            $('footer').find('.checkin span').text(checkin);
+
         }).fail(function() {
             alert( "Application can't retrieve foursquare data" );
         });

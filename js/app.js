@@ -145,14 +145,20 @@ function init() {
         this.description = data.description;
     };
 
-    // flag for first marker render/create
+    // flag first marker render/create
     var flagInitialRender = false;
 
     // Initialize ViewModel Knockout
     var ViewModel = function() {
         var that = this;
 
+        // footer visibility
         this.showing = ko.observable(false);
+
+        // footer foursquare info bind
+        this.categorie = ko.observable();
+        this.address = ko.observable();
+        this.checkin = ko.observable();
 
         // Set location list observable array from places
         this.placeList = ko.observableArray([]);
@@ -270,10 +276,10 @@ function init() {
         // Create new marker for each place in array and push to markers array
         for (var i = 0, len = placeToShow.length; i < len; i++) {
 
-            if(flagInitialRender){
+            if (flagInitialRender) {
                 this.markers[i].setVisible(true);
                 this.markers[i].setAnimation(google.maps.Animation.DROP);
-            }else{
+            } else {
                 var location = {
                     lat: placeToShow[i].lat,
                     lng: placeToShow[i].lng
@@ -293,10 +299,10 @@ function init() {
                 // add event listener for click event to the newly created marker
                 marker.addListener('click', this.activateMarker(marker, context, infowindow, i));
             }
-            
+
         }
 
-        if(!flagInitialRender){
+        if (!flagInitialRender) {
             flagInitialRender = true;
         }
     };
@@ -337,12 +343,14 @@ function init() {
 
             // show footer
             self.showing(true);
-            $('footer').find('.categoria span').text(categorie);
-            $('footer').find('.localizacao span').text(address);
-            $('footer').find('.checkin span').text(checkin);
+
+            // bind html
+            self.categorie(categorie);
+            self.address(address);
+            self.checkin(checkin);
 
         }).fail(function() {
-            alert( "Application can't retrieve foursquare data" );
+            alert("Application can't retrieve foursquare data");
         });
     }
 

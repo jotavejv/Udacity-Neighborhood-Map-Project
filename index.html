@@ -44,9 +44,9 @@
         </div>
         <footer data-bind="css: { 'showing': showing }">
             <ul>
-                <li class="categoria"><b>Categoria:</b> <span></span></li>
-                <li class="localizacao"><b>Localização:</b> <span></span></li>
-                <li class="checkin"><b>Total de check in:</b> <span></span></li>
+                <li class="categoria"><b>Categoria:</b> <span data-bind="text: categorie"></span></li>
+                <li class="localizacao"><b>Localização:</b> <span data-bind="text: address"></span></li>
+                <li class="checkin"><b>Total de check in:</b> <span data-bind="text: checkin"></span></li>
             </ul>
         </footer>
     </main>
